@@ -30,33 +30,57 @@ def get_contact_number(name_contact):
     return f'Name: {name_contact[0]} Number: {contacts[name_contact[0]]}'
 
 
+@input_error
+def quit_func(quit_command):
+    return f'Good bye!'
+
+
+@input_error
+def hello_func(hello_command):
+    return f"Hello! How can I help you?"
+
+
+@input_error
+def show_all_func(show_all_command):
+    return f'All contacts: \n{contacts}'
+
+
 def main():
 
     commands = {
         'add': add_new_contact,
         'change': change_contact,
-        'phone': get_contact_number
+        'phone': get_contact_number,
+        'hello': hello_func,
+        'show all': show_all_func,
+        'good bye': quit_func,
+        'close': quit_func,
+        'exit': quit_func,
     }
+
+    print('Bot-assistant here...')
 
     while True:
 
         user_input = input().lower()
-
         if user_input == '.':
             break
-        elif user_input == 'hello':
-            print('How can I help you?')
-        elif user_input == 'show all':
-            print(contacts)
-        elif user_input in ('good bye', 'close', 'exit'):
-            print('Good bye!')
-            break
-        elif user_input.split()[0] in commands:
+
+        if user_input.split()[0] in commands:
             test_none = commands[user_input.split()[0]](user_input.split()[1:])
+
             if test_none is not None:
                 print(commands[user_input.split()[0]](user_input.split()[1:]))
+
+                if commands[user_input.split()[0]](user_input.split()[1:]) == "Good bye!":
+                    break
+
+        elif user_input in commands:
+            print(commands[user_input](user_input))
+
         else:
-            print(f"I don't know, what is '{user_input}', please, try again:")
+            print(
+                f"Sorry, i don't know, what is '{user_input}', please, try again:")
 
 
 if __name__ == "__main__":
